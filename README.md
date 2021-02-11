@@ -1,5 +1,10 @@
 # backend Guestbook
 
+Prozessdiagramme
+![Bild 1](GuestbookProzess.jpg)
+
+
+
 Dieses Backend regelt die Infomationslogistick in der Application 'Guestbook' zwischen MondoDD in der Die Informationen Gespeichert sind und dem Frontend welches die Informationen für den Nutzer Grafisch rendert. 
 
 Index.js ist das Haupt script, welches einen Server öffnet auf dem weiteren scripte augeführt werden.

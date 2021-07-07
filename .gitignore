@@ -2,4 +2,4 @@ out
 node_modules
 .vscode-test
 *.vsix
-# config.js # hier um um Mondodb Zugang nicht zu veröffetlichen
+# config.js # hier um um Mongodb Zugang nicht zu veröffetlichen

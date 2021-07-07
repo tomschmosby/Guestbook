@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // anlegen des Json schemas für die Collection Profiles
 const profilesSchema = mongoose.Schema({
         macadresse: {
-        type: string,
+        type: String,
         required: true
       },
       name: {
@@ -23,7 +23,7 @@ const profilesSchema = mongoose.Schema({
         required: true
       },
       ts: {
-        type: Date,
+        type: String,
         default: Date.now(),
       }
 });

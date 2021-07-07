@@ -1,7 +1,11 @@
+// der Datenbankhandler enthaellt die Logic für die verarbeitung der Json Dateien. 
+
+//Importieren der Schemes
 const Sniff = require('./models/sniffers');
 const Profile = require('./models/profiles');
 const Event = require('./models/events');
 
+//Sniffer Jsons in DB ablegen 
 function savesnif(data) {
   return new Promise(async (resolve, reject) => {
     const snif = new Sniff({
@@ -21,6 +25,7 @@ function savesnif(data) {
   });
 }
 
+//Profile Jsons in Profile ablegen
 function saveprof(data) {
     return new Promise(async (resolve, reject) => {
       const prof = new Profile({
@@ -40,6 +45,8 @@ function saveprof(data) {
     });
   }
 
+
+  //Event jsons in Event ablegen
   function saveevent(data) {
     return new Promise(async (resolve, reject) => {
       const event = new Event({
@@ -58,6 +65,7 @@ function saveprof(data) {
     });
   }
 
+  
 module.exports = {
   savesnif,
   saveevent,

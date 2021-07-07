@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // anlegen des Json schemas für die Collection Sniffers
 const snifferSchema = mongoose.Schema({
        macadressen: {
-        type: array,
+        type: Array,
         
       },
       dev_id: {
@@ -17,4 +17,4 @@ const snifferSchema = mongoose.Schema({
 
 
 
-module.exports = mongoose.model('sniffers', sniffersSchema);
+module.exports = mongoose.model('sniffers', snifferSchema);

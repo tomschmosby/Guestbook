@@ -8,6 +8,9 @@ const config = require('../config.js');
 const bodyParser =require('body-parser');
 const cors = require('cors');
 const dbhandler = require('./databasehandler');
+var mqtt = require('mqtt')
+var client  = mqtt.connect('mqtt://test.mosquitto.org')
+const port = 8080;
 
 
 //Middlewares
@@ -18,7 +21,7 @@ app.use(bodyParser.json());
 //Import Routes
 const postsRoute = require('./routes/posts');
 
-app.use('/posts', postsRoute);
+app.use(postsRoute);
 
 //Routes 
 app.get('/', (req, res) => {
@@ -26,8 +29,8 @@ app.get('/', (req, res) => {
 });
 
 //Connect To DB
-mongoose.connect(config.mongodb.constring, { useNewUrlParser: true}, ()=> 
-    console.log('connected to DB!')
+mongoose.connect(config.mongodb.constring, { useNewUrlParser: true}, (err)=> 
+    console.log(err)
 );
 
 //connect to MQTT 
@@ -49,10 +52,10 @@ client.on('message', function (topic, message) {
     .then((res) => console.log(res)).catch((err) => console.error(err));
   });
   
-//Starte Server auf port 8181
-app.listen(8181);
 
-
+  app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`)
+  });
 
 
 

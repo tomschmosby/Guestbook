@@ -22,7 +22,7 @@ config.mongodb.collectionp = process.env.MONGODB_COLLECTION || 'profiles';
 config.mongodb.collectione = process.env.MONGODB_COLLECTION || 'events';
 config.mongodb.collections = process.env.MONGODB_COLLECTION || 'sniffers';
 
-
+//Passwort  CEjMjo2cSEv8WtAZ
 config.mongodb.constring = "mongodb+srv://d5K5Hf2wlybP8Ti9:CEjMjo2cSEv8WtAZ@cluster0.qnxj3.mongodb.net/guestbook?retryWrites=true&w=majority"
 module.exports = config;
 

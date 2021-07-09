@@ -1,8 +1,8 @@
 // der Datenbankhandler enthaellt die Logic für die verarbeitung der Json Dateien. 
 
 //Importieren der Schemes
-const Sniff = require('./models/sniffers');
-const Profile = require('./models/profiles');
+const Sniff = require('./models/SniffResults');
+const Profile = require('./models/UserProfiles');
 const Event = require('./models/events');
 
 //Sniffer Jsons in DB ablegen 
@@ -34,7 +34,7 @@ function saveprof(data) {
         payload_fields: JSON.stringify(data.payload_fields),
         metadata: JSON.stringify(data.metadata),
       });
-      console.log(prof)
+      console.log(prof);
   
       try {
         const savedProf = await prof.save()
@@ -54,7 +54,7 @@ function saveprof(data) {
         name: req.body.name,
         sniffer: req.body.sniffer
       });
-      console.log(event)
+      console.log(event);
   
       try {
         const savedEvent = await event.save()

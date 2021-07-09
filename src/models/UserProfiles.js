@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // anlegen des Json schemas für die Collection Profiles
 const profilesSchema = mongoose.Schema({
-        macadresse: {
+      macadresse: {
         type: String,
         required: true
       },
@@ -10,17 +10,18 @@ const profilesSchema = mongoose.Schema({
         type: String,
         required: true
       },
+      address: {
+        type: String,
+        required: true
+      },
       sniffer: {
         type: String,
-        required: true
       },
-      freinds: {
+      friends: {
         type: String,
-        required: true
       },
-      closefreinds: {
+      closefriends: {
         type: String,
-        required: true
       },
       ts: {
         type: String,
@@ -30,4 +31,4 @@ const profilesSchema = mongoose.Schema({
 
 
 
-module.exports = mongoose.model('profiles', profilesSchema);
+module.exports = mongoose.model('profile', profilesSchema);

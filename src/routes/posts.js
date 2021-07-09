@@ -1,14 +1,12 @@
 //einbinden von tools und Files
 const express = require('express');
 const router = express.Router();
-const Sniffer = require('../models/sniffers');
-const Profile = require('../models/profiles');
-const events = require('../models/events');
+const Sniffer = require('../models/SniffResults');
+const Profile = require('../models/UserProfiles');
+const Event = require('../models/events');
 const dbhandler = require('../databasehandler');
-const profiles = require('../models/profiles');
-const {
-    insertMany
-} = require('../models/sniffers');
+
+
 
 
 //finde einen Bestimmten Sniffer Index in der Sniffer Collection
@@ -23,14 +21,22 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/events', async (req, res) => {
+    Event.find()
+        .then((data) => res.send(data))
+        .catch((err) => res.send(err));
+});
 
 //Post endpoint für Events anlegen Frontend
 router.post('/event', async (req, res) => {
-    dbhandler.saveevent({
-            macadressen: req.body.macadressen,
+    Event({
             name: req.body.name,
-            sniffer: req.body.sniffer
+            sniffer: req.body.sniffer,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude,         
+            maxguests: req.body.maxguests,
         })
+        .save()
         .then((res) => res.json(res)).catch((err) => res.json({
             message: err
         }));
@@ -40,14 +46,11 @@ router.post('/event', async (req, res) => {
 
 //Post endpoint für Profiles anlegen Frontend
 router.post('/profiles', async (req, res) => {
-    dbhandler.saveprof({
-        macadressen: req.body.macadressen,
+    Profile({
         name: req.body.name,
-        sniffer: req.body.name,
-        freinds: req.body.friends,
-        closefreinds: req.body.closefreinds,
-        ts: req.body.ts,
-    })
+        address: req.body.address,
+        macadresse: req.body.userMacadresse,
+    }).save().then(() => res.status(200).send());
 });
 
 
@@ -62,46 +65,40 @@ router.post('/sniffers', async (req, res) => {
 
 
 //Suche nach einem Profil index nach der macadresse
-router.get('/:profilesId', async (req, res) => {
-    try {
-        Profile = await Post.findById(req.macadressen.profiles)
-        res.json(Profile);
-    } catch (err) {
-        // res.json({ message: No Profile Found});
-    }
+router.get('/profiles/:profilesId', async (req, res) => {
+        Profile.findById(req.macadressen.profiles).then((data)=> res.json(data))
+        .catch((err) => console.log(err));
+   
 });
 
 router.post('/probe', async (req, res) => {
     // console.log("test",req.body)
-    console.log(req.body.probes)
+    console.log(req.body.probes);
     //Finde Event das zum Snifferpasst
     try {
         //Finde Event das zum Snifferpasst
-        const EventID = await events.findOne({
+        const EventID = await Event.findOne({
             sniffer: req.body.eventsrc
         }).exec();
         // console.log(EventID)
+        const newEvent = EventID;
 
-
-
-        //Finde User in Profiles liste wenn einer gefunden wird Update Event um das Profil als gast
-        req.body.probes.forEach(async (p) => {
-            // console.log(p);
-            profiles.findOne({
+        const probes = req.body.probes;
+        for await (const p of probes) {
+            const user = await Profile.findOne({
                 macadresse: p.address
-            }).then((User) => {
-                if (User) {  
-                    console.log(User);
-                    const newEvent = EventID;
-                    if (!newEvent.macadressen) newEvent.macadressen = [];
-                    newEvent.macadressen.push(User._id);
-                    newEvent.ts = Date.now();
-                    newEvent.save();
-                }
             });
-        });
+            if (user) {  
+                console.log(user);
+                if (!newEvent.macadressen) newEvent.macadressen = [];
+                if (!newEvent.macadressen.includes(user._id)) newEvent.macadressen.push(user._id);
+                newEvent.ts = Date.now();
+            }
+        }
+        
+        await newEvent.save();
 
-        res.status(200).send();
+        await res.status(200).send();
 
 // ee:fb:67:37:2a:e0
 // 6c:c7:ec:82:03:e8

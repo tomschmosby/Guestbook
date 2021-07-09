@@ -18,14 +18,16 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-//Import Routes
+//Routes
 const postsRoute = require('./routes/posts');
+
+
 
 app.use(postsRoute);
 
-//Routes 
+//when you opne this endpoint in the browser the folling text will appear 
 app.get('/', (req, res) => {
-    res.send('We are on Home');
+    res.send('Kellerzone');
 });
 
 //Connect To DB
@@ -33,16 +35,17 @@ mongoose.connect(config.mongodb.constring, { useNewUrlParser: true}, (err)=>
     console.log(err)
 );
 
-//connect to MQTT 
-client.on('connect', function () {
-    client.subscribe(config.mqtt.namespace);
-    console.log("MQTT connected")
-});
+// //connect to MQTT 
+// client.on('connect', function () {
+//     client.subscribe(config.mqtt.namespace);
+//     console.log("MQTT connected")
+// });
 
 //MQTT Sniffer daten zur Datenbank
-client.on('message', function (topic, message) {
+/*client.on('message', function (topic, message) {
     // message is Buffer
     const data = JSON.parse(message.toString());
+    console.log("data");
     console.log(data);
     dbhandler.savesnif({
      macadressen: data.macadressen,
@@ -52,7 +55,7 @@ client.on('message', function (topic, message) {
     .then((res) => console.log(res)).catch((err) => console.error(err));
   });
   
-
+*/
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
   });

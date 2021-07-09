@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // anlegen des Json schemas für die Collection Events
 const eventsSchema = mongoose.Schema({
-        macadressen: [],
+      macadressen: [],
       name: {
         type: String,
         required: true
@@ -10,6 +10,18 @@ const eventsSchema = mongoose.Schema({
       sniffer: {
         type: String,
         required: true
+      },   
+      longitude: {
+        type: String,
+        requre: true,
+      },
+      latitude: {
+        type: String,
+        requre: true,
+      },
+      maxguests:{
+        type: Number,
+        require: true,
       },
       ts: String,
 });

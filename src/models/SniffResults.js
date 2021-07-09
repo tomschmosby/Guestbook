@@ -13,8 +13,14 @@ const snifferSchema = mongoose.Schema({
       user_id: {
         type: String,
       },
+      longitude: {
+        type: String,
+      },
+      latitude: {
+        type: String,
+      },
 });
 
 
 
-module.exports = mongoose.model('sniffers', snifferSchema);
+module.exports = mongoose.model('SniffResults', snifferSchema);

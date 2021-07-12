@@ -1,3 +1,4 @@
+// Mit hilfe von Tokens wird abgeglichen ob ein user im Frontend einem bestimmten Profiel zugewiesen ist und ob er bereits eingelogget ist.
 const jwt = require('jsonwebtoken');
 const Profile = require('../models/UserProfiles');
 

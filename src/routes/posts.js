@@ -81,6 +81,8 @@ router.post('/profiles', async (req, res) => {
     });
 });
 
+
+// Post Endpoint für Login, hier werden die Login daten gehashed und die verglichen 
 router.post('/login', async (req, res) => {
     console.log('login');
     Profile.findOne({ email: req.body.loginEmail })
@@ -125,6 +127,8 @@ router.get('/profiles/:profilesId', auth, async (req, res) => {
    
 });
 
+
+//Endpoint für Sniffer Hier werden die Sniffer daten empfangen und mit der Datenbank abgeglichen
 router.post('/probe', async (req, res) => {
     // console.log("test",req.body)
     console.log(req.body.probes);
@@ -154,9 +158,7 @@ router.post('/probe', async (req, res) => {
 
         await res.status(200).send();
 
-// ee:fb:67:37:2a:e0
-// 6c:c7:ec:82:03:e8
-// 6a:89:e7:dd:5e:ac
+
     } catch (err) {
         res.json({
             message: err

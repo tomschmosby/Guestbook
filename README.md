@@ -21,6 +21,11 @@ sind die Folgenden tool zu installieren:
     Podyparser
     Cors
 
+Der Dockfile sowie Jenkins file dient dem Deploiment
+
 Außerdem ist eine Datenbank in MongoDB an zu legen und die Connection in der config.js zu ersetzen.  
+
+In dem Ordner sniffer befindet sich der Sketch sniffer.ino, dieser ist mittels der Adruino skd auf einem ESP8266 zu flashen, hierfür sind die Kommentare in dem Sketch für die Instalation und inbetriebnahme zu beachten .
+
 
 

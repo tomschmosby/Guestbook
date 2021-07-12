@@ -1,4 +1,4 @@
-// der Datenbankhandler enthaellt die Logic für die verarbeitung der Json Dateien. 
+// der Datenbankhandler enthaellt die Logic für die verarbeitung der Middle ware.
 
 //Importieren der Schemes
 const Sniff = require('./models/SniffResults');

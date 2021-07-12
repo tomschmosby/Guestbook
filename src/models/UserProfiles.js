@@ -23,6 +23,12 @@ const profilesSchema = mongoose.Schema({
       closefriends: {
         type: String,
       },
+      email: {
+        type: String,
+        unique: true,
+        required: true
+      },
+      passwordHash: String,
       ts: {
         type: String,
         default: Date.now(),

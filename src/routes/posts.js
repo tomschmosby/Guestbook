@@ -1,13 +1,17 @@
 //einbinden von tools und Files
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const Sniffer = require('../models/SniffResults');
 const Profile = require('../models/UserProfiles');
 const Event = require('../models/events');
+const auth = require('../middleware/auth');
 const dbhandler = require('../databasehandler');
 
-
-
+// Password encryption level
+const saltRounds = 10;
 
 //finde einen Bestimmten Sniffer Index in der Sniffer Collection
 router.get('/', async (req, res) => {
@@ -21,20 +25,21 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/events', async (req, res) => {
+router.get('/events', auth, async (req, res) => {
     Event.find()
         .then((data) => res.send(data))
         .catch((err) => res.send(err));
 });
 
 //Post endpoint für Events anlegen Frontend
-router.post('/event', async (req, res) => {
+router.post('/event', auth, async (req, res) => {
     Event({
             name: req.body.name,
             sniffer: req.body.sniffer,
             longitude: req.body.longitude,
             latitude: req.body.latitude,         
             maxguests: req.body.maxguests,
+            ownerId: req.decodedUserId,
         })
         .save()
         .then((res) => res.json(res)).catch((err) => res.json({
@@ -46,16 +51,57 @@ router.post('/event', async (req, res) => {
 
 //Post endpoint für Profiles anlegen Frontend
 router.post('/profiles', async (req, res) => {
+    console.log('register');
     Profile({
         name: req.body.name,
         address: req.body.address,
         macadresse: req.body.userMacadresse,
-    }).save().then(() => res.status(200).send());
+        passwordHash: bcrypt.hashSync(req.body.profilePassword, saltRounds),
+        email: req.body.profileEmail,
+    }).save().then((usr) => {
+        const token = jwt.sign({ userId: usr._id }, process.env.JWT_SECRET);
+        res.status(200).json(
+        {
+            token,
+            email: usr.email,
+            name: usr.name,
+            id: usr._id,
+        }).catch((err) => {
+            console.log(err);
+            res.status(400).send('account taken');
+        });
+    });
+});
+
+router.post('/login', async (req, res) => {
+    console.log('login');
+    Profile.findOne({ email: req.body.loginEmail })
+    .then((usr) => {
+        if (!usr) {
+        res.status(401).send('invalid credentials - err 1');
+        } else if (bcrypt.compareSync(req.body.loginPassword, usr.passwordHash)) {
+        const token = jwt.sign({ userId: usr._id }, process.env.JWT_SECRET);
+        res.status(200).json(
+            {
+                token,
+                email: usr.email,
+                name: usr.name,
+                id: usr._id,
+            },
+        );
+        } else {
+        res.status(401).send('invalid credentials - err2');
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).json({ title: 'server error', err });
+    });
 });
 
 
 //Post endpoint für sniffer anlegen Frontend
-router.post('/sniffers', async (req, res) => {
+router.post('/sniffers', auth, async (req, res) => {
     dbhandler.savesnif({
         macadressen: req.body.macadressen,
         dev_id: req.body.dev_id,
@@ -65,7 +111,7 @@ router.post('/sniffers', async (req, res) => {
 
 
 //Suche nach einem Profil index nach der macadresse
-router.get('/profiles/:profilesId', async (req, res) => {
+router.get('/profiles/:profilesId', auth, async (req, res) => {
         Profile.findById(req.macadressen.profiles).then((data)=> res.json(data))
         .catch((err) => console.log(err));
    
@@ -115,7 +161,7 @@ router.post('/probe', async (req, res) => {
 
 
 //Event Index updaten 
-router.patch('/:eventsId', async (req, res) => {
+router.patch('/:eventsId', auth, async (req, res) => {
     try {
         const updatePost = await events.updateOne({
             macadressen: req.macadressen.Profile

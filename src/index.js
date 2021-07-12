@@ -1,16 +1,16 @@
 //die Index.js bildet das Haupt script um das Backend zu starten und zu erreichen, es fürt auch die verlinkten weiteren scripts aus
 
 //Einbinden von Tools und Files
+const path = require('path');
+require('dotenv').config({path: path.join(__dirname, '..', '.env')})
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const config = require('../config.js');
 const bodyParser =require('body-parser');
 const cors = require('cors');
 const dbhandler = require('./databasehandler');
-var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt://test.mosquitto.org')
-const port = 8080;
+
+const port = 3001;
 
 
 //Middlewares
@@ -31,7 +31,8 @@ app.get('/', (req, res) => {
 });
 
 //Connect To DB
-mongoose.connect(config.mongodb.constring, { useNewUrlParser: true}, (err)=> 
+const mongoUrl = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@${process.env.MONGO_URL}/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+mongoose.connect(mongoUrl, { useNewUrlParser: true}, (err)=> 
     console.log(err)
 );
 

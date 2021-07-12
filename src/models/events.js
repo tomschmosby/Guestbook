@@ -23,6 +23,7 @@ const eventsSchema = mongoose.Schema({
         type: Number,
         require: true,
       },
+      ownerID: String,
       ts: String,
 });
 

@@ -16,7 +16,7 @@ RUN npm install
 COPY . .
 
 # Network / reverse proxy config
-LABEL traefik.http.routers.guestbook.rule="Host(`guestbook.ds.ava.hfg.design`)"
+LABEL traefik.http.routers.guestbookbe.rule="Host(`guestbookbe.ds.ava.hfg.design`)"
 
 EXPOSE 3001
 CMD [ "node", "src/index.js" ]

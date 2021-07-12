@@ -42,7 +42,16 @@ router.post('/event', auth, async (req, res) => {
             ownerId: req.decodedUserId,
         })
         .save()
-        .then((res) => res.json(res)).catch((err) => res.json({
+        .then((data) => res.json(data)).catch((err) => res.json({
+            message: err
+        }));
+});
+
+//Post endpoint für Events anlegen Frontend
+router.delete('/event', auth, async (req, res) => {
+    const e = await Event.findById(req.body.id);
+    if (req.decodedUserId !== e.ownerId) return res.status(401).send('not owner');
+    e.delete().then(() => res.status(200).send()).catch((err) => res.json({
             message: err
         }));
 });
@@ -66,10 +75,9 @@ router.post('/profiles', async (req, res) => {
             email: usr.email,
             name: usr.name,
             id: usr._id,
-        }).catch((err) => {
+        })}).catch((err) => {
             console.log(err);
             res.status(400).send('account taken');
-        });
     });
 });
 

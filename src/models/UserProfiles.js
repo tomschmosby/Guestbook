@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 // anlegen des Json schemas für die Collection Profiles
 const profilesSchema = mongoose.Schema({
+      email: {
+        type: String,
+        unique: true,
+      },
       macadresse: {
         type: String,
         required: true
@@ -22,11 +26,6 @@ const profilesSchema = mongoose.Schema({
       },
       closefriends: {
         type: String,
-      },
-      email: {
-        type: String,
-        unique: true,
-        required: true
       },
       passwordHash: String,
       ts: {
